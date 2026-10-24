@@ -27,6 +27,8 @@ juce_add_plugin(Tangier
 
 target_sources(Tangier
     PRIVATE
+        src/Parameters.cpp
+        src/engine/SynthEngine.cpp
         src/PluginProcessor.cpp
         src/PluginEditor.cpp)
 
@@ -51,6 +53,6 @@ target_link_libraries(Tangier
 
 enable_testing()
 
-add_executable(TangierDspTests tests/DspTests.cpp)
+add_executable(TangierDspTests tests/DspTests.cpp src/engine/SynthEngine.cpp)
 target_include_directories(TangierDspTests PRIVATE src)
 add_test(NAME TangierDspTests COMMAND TangierDspTests)

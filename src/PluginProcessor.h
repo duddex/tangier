@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "engine/SynthEngine.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 
 class TangierAudioProcessor : public juce::AudioProcessor
@@ -36,6 +38,28 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    juce::AudioProcessorValueTreeState& getState() { return state; }
+
+    /** Keyboard state shared with the on-screen keyboard in the editor. */
+    juce::MidiKeyboardState& getKeyboardState() { return keyboardState; }
+
+    /** For the UI: current shared LFO value (-1..1) and number of sounding voices. */
+    float getLfoDisplayValue() const { return lfoDisplay.load(); }
+    int getActiveVoiceCount() const { return activeVoices.load(); }
+
 private:
+    tangier::SynthControls readControls() const;
+    void handleMidi (const juce::MidiMessage& m);
+
+    juce::AudioProcessorValueTreeState state;
+    juce::MidiKeyboardState keyboardState;
+    tangier::SynthEngine engine;
+
+    std::vector<float> monoBuffer;
+    std::vector<float> extBuffer;
+
+    std::atomic<float> lfoDisplay { 0.0f };
+    std::atomic<int> activeVoices { 0 };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TangierAudioProcessor)
 };

@@ -9,6 +9,7 @@
 #include "dsp/LoopingAdsr.h"
 #include "dsp/Noise.h"
 #include "dsp/OtaFilter.h"
+#include "engine/SynthEngine.h"
 
 #include <cstdio>
 #include <functional>
@@ -190,6 +191,92 @@ void testPinkNoise()
     for (int i = 0; i < static_cast<int> (kSampleRate); ++i)
         check (isFiniteAndBounded (pink.process(), 4.0f), "pink noise out of range");
 }
+
+float renderPeak (tangier::SynthEngine& engine, int numSamples)
+{
+    std::vector<float> buffer (static_cast<size_t> (numSamples));
+    engine.render (buffer.data(), nullptr, numSamples);
+
+    float peak = 0.0f;
+    for (float s : buffer)
+    {
+        check (std::isfinite (s), "engine output not finite");
+        peak = std::max (peak, std::abs (s));
+    }
+    return peak;
+}
+
+void testEngineNoteOnOff()
+{
+    tangier::SynthEngine engine;
+    engine.prepare (kSampleRate);
+    tangier::SynthControls c;
+    c.release = 0.2f;
+    engine.setControls (c);
+
+    check (renderPeak (engine, 480) == 0.0f, "engine should be silent without notes");
+
+    engine.noteOn (60, 1.0f);
+    engine.noteOn (64, 1.0f);
+    engine.noteOn (67, 1.0f);
+    const float peak = renderPeak (engine, 4800);
+    check (peak > 0.05f && peak < 1.5f, "chord should be audible and not clip, peak " + std::to_string (peak));
+    check (engine.getNumActiveVoices() == 3, "three voices should be active");
+
+    engine.noteOff (60);
+    engine.noteOff (64);
+    engine.noteOff (67);
+    renderPeak (engine, static_cast<int> (kSampleRate));
+    check (engine.getNumActiveVoices() == 0, "voices should be freed after release");
+    check (renderPeak (engine, 480) == 0.0f, "engine should be silent after release");
+}
+
+void testEngineVoiceStealing()
+{
+    tangier::SynthEngine engine;
+    engine.prepare (kSampleRate);
+    tangier::SynthControls c;
+    c.voices = 4;
+    engine.setControls (c);
+
+    for (int n = 0; n < 10; ++n)
+        engine.noteOn (48 + n, 0.8f);
+    renderPeak (engine, 480);
+    check (engine.getNumActiveVoices() == 4, "voice count should be limited to 4, got "
+                                                 + std::to_string (engine.getNumActiveVoices()));
+    engine.allNotesOff();
+}
+
+void testEngineMonoLegato()
+{
+    tangier::SynthEngine engine;
+    engine.prepare (kSampleRate);
+    tangier::SynthControls c;
+    c.voices = 1;
+    engine.setControls (c);
+
+    engine.noteOn (60, 1.0f);
+    engine.noteOn (67, 1.0f);
+    renderPeak (engine, 480);
+    engine.noteOff (67); // falls back to the held note 60
+    check (renderPeak (engine, 4800) > 0.05f, "mono voice should keep sounding the held note");
+    check (engine.getNumActiveVoices() == 1, "mono mode should use a single voice");
+}
+
+void testEngineSustainPedal()
+{
+    tangier::SynthEngine engine;
+    engine.prepare (kSampleRate);
+    engine.setControls ({});
+
+    engine.sustainPedal (true);
+    engine.noteOn (60, 1.0f);
+    engine.noteOff (60);
+    check (renderPeak (engine, 4800) > 0.05f, "sustain pedal should hold the note");
+    engine.sustainPedal (false);
+    renderPeak (engine, static_cast<int> (kSampleRate));
+    check (engine.getNumActiveVoices() == 0, "releasing the pedal should release the note");
+}
 } // namespace
 
 int main()
@@ -203,6 +290,10 @@ int main()
         { "looping ADSR", testLoopingAdsrReleases },
         { "LFO", testLfo },
         { "pink noise", testPinkNoise },
+        { "engine note on/off", testEngineNoteOnOff },
+        { "engine voice stealing", testEngineVoiceStealing },
+        { "engine mono legato", testEngineMonoLegato },
+        { "engine sustain pedal", testEngineSustainPedal },
     };
 
     for (const auto& [name, test] : tests)
