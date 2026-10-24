@@ -48,3 +48,9 @@ target_link_libraries(Tangier
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
+
+enable_testing()
+
+add_executable(TangierDspTests tests/DspTests.cpp)
+target_include_directories(TangierDspTests PRIVATE src)
+add_test(NAME TangierDspTests COMMAND TangierDspTests)
