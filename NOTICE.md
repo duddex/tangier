@@ -27,6 +27,8 @@ Changes made in Tangier (2026), as required by GPLv3 section 5(a):
   look-up table.
 - Replaced the VCV Rack CV/gate inputs with MIDI note handling, voice
   allocation, pitch bend, mod wheel, velocity and aftertouch.
+- In cycle mode the envelope loops only while a note is held, so voices can be
+  released. In the original, the envelope keeps cycling after the gate goes low.
 - Added plugin-specific parameters: voice count, pitch-bend range, velocity
   sensitivity, LFO key sync and master volume.
 - New JUCE user interface. No Valley panel graphics are used.
