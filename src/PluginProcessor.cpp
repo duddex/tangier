@@ -186,7 +186,7 @@ void TangierAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
 juce::AudioProcessorEditor* TangierAudioProcessor::createEditor()
 {
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new TangierAudioProcessorEditor (*this);
 }
 
 void TangierAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
