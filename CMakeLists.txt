@@ -10,7 +10,7 @@ add_subdirectory(libs/JUCE)
 juce_add_plugin(Tangier
     COMPANY_NAME "duddex"
     COMPANY_WEBSITE "https://github.com/duddex"
-    PLUGIN_MANUFACTURER_CODE Dudx
+    PLUGIN_MANUFACTURER_CODE Ddex
     PLUGIN_CODE Tngr
     FORMATS VST3 Standalone
     PRODUCT_NAME "Tangier"
