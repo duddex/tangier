@@ -9,6 +9,8 @@ Each voice has one oscillator (saw, pulse and sub at once), a mixer with noise
 and an external input, a 2/4-pole OTA low-pass filter followed by a high-pass
 filter, a looping ADSR envelope and a VCA. One LFO is shared by all voices.
 
+![Tangier standalone app](docs/tangier.png)
+
 ## MIDI
 
 Tangier replaces Interzone's CV inputs with MIDI:
