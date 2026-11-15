@@ -8,6 +8,14 @@
 
 #include <juce_audio_utils/juce_audio_utils.h>
 
+class TangierLookAndFeel final : public juce::LookAndFeel_V4
+{
+public:
+    void drawRotarySlider (juce::Graphics&, int x, int y, int width, int height,
+                           float sliderPosProportional, float rotaryStartAngle,
+                           float rotaryEndAngle, juce::Slider&) override;
+};
+
 class TangierAudioProcessorEditor : public juce::AudioProcessorEditor,
                                     private juce::Timer
 {
@@ -52,7 +60,7 @@ private:
     void timerCallback() override;
 
     TangierAudioProcessor& processor;
-    juce::LookAndFeel_V4 lookAndFeel;
+    TangierLookAndFeel lookAndFeel;
 
     std::vector<std::unique_ptr<Control>> controls;
     std::vector<std::unique_ptr<Section>> sections;
