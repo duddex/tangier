@@ -74,6 +74,9 @@ Tangier is not an official Valley Audio product.
 
 ## Credits
 
-Designed and developed by [duddex](https://github.com/duddex). Based on the
-Interzone module by Dale Johnson (Valley Audio), with the looping ADSR derived
-from VCV Fundamental. Built on the [JUCE](https://juce.com) framework.
+Designed and developed by [duddex](https://github.com/duddex) with the help of a
+large language model (LLM).
+
+Tangier is based on the Interzone module by Dale Johnson (Valley Audio), with the
+looping ADSR derived from VCV Fundamental. Built on the [JUCE](https://juce.com)
+framework.
