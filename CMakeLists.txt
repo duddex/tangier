@@ -5,7 +5,14 @@ project(Tangier VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(libs/JUCE)
+include(FetchContent)
+
+# JUCE is fetched at configure time. Bump GIT_TAG to update the framework.
+FetchContent_Declare(JUCE
+    GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
+    GIT_TAG        9.0.4
+    GIT_SHALLOW    ON)
+FetchContent_MakeAvailable(JUCE)
 
 juce_add_plugin(Tangier
     COMPANY_NAME "duddex"

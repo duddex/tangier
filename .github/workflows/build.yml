@@ -15,8 +15,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
+
+      - name: Cache JUCE sources
+        uses: actions/cache@v6
         with:
-          submodules: true
+          path: build/_deps
+          key: juce-deps-${{ hashFiles('CMakeLists.txt') }}
+
 
       - name: Configure
         run: cmake -S . -B build

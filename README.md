@@ -35,7 +35,7 @@ Requirements: CMake 3.22 or newer and a C++20 compiler (tested with Visual
 Studio 2026 on Windows).
 
 ```sh
-git clone --recurse-submodules https://github.com/duddex/tangier.git
+git clone https://github.com/duddex/tangier.git
 cd tangier
 cmake -S . -B build
 cmake --build build --config Release

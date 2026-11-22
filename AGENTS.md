@@ -19,14 +19,14 @@ polyphonic, with a Juno-style high-pass filter.
 ## Getting started on a new machine
 
 ```sh
-git clone --recurse-submodules https://github.com/duddex/tangier.git
+git clone https://github.com/duddex/tangier.git
 cd tangier
 cmake -S . -B build                      # first configure builds juceaide (takes a few minutes)
 cmake --build build --config Release --parallel
 ctest --test-dir build -C Release --output-on-failure
 ```
 
-- If you cloned without `--recurse-submodules`, run `git submodule update --init`.
+- JUCE is fetched by CMake FetchContent at configure time, so the first configure needs network access.
 - Requirements: CMake 3.22 or newer and a C++20 compiler. Development used
   Visual Studio 2026 (MSVC 14.51) on Windows. macOS and Linux should work with
   JUCE but have **not been tested**. On Linux, install JUCE's dependencies first
@@ -46,7 +46,7 @@ ctest --test-dir build -C Release --output-on-failure
 | `src/PluginProcessor.*` | JUCE `AudioProcessor`: reads parameters into `SynthControls`, splits each block at MIDI events, handles the optional external input bus, saves and restores state. |
 | `src/PluginEditor.*` | Custom UI: sections (VCO, Mixer, VCA, Global / Filter, LFO, Envelope) and on-screen keyboard. |
 | `tests/DspTests.cpp` | Self-contained test executable (no framework), run via CTest. Builds against `src/dsp` and `SynthEngine.cpp` without JUCE. |
-| `libs/JUCE` | JUCE **9.0.4** as a git submodule (shallow). |
+| `build/_deps` | JUCE **9.0.4**, fetched by CMake FetchContent (shallow). Generated, not committed. |
 | `licenses/`, `LICENSE`, `NOTICE.md` | Licence texts and notices. See "Licensing rules" below. |
 | `.github/workflows/build.yml` | Windows CI: configure, build, test, zip. A `v*` tag creates a GitHub release. |
 
