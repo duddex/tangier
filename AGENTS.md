@@ -46,7 +46,7 @@ ctest --test-dir build -C Release --output-on-failure
 | `src/PluginProcessor.*` | JUCE `AudioProcessor`: reads parameters into `SynthControls`, splits each block at MIDI events, handles the optional external input bus, saves and restores state. |
 | `src/PluginEditor.*` | Custom UI: sections (VCO, Mixer, VCA, Global / Filter, LFO, Envelope) and on-screen keyboard. |
 | `tests/DspTests.cpp` | Self-contained test executable (no framework), run via CTest. Builds against `src/dsp` and `SynthEngine.cpp` without JUCE. |
-| `build/_deps` | JUCE **9.0.4**, fetched by CMake FetchContent (shallow). Generated, not committed. |
+| `build/_deps` | JUCE **9.0.5**, fetched by CMake FetchContent (shallow). Generated, not committed. |
 | `licenses/`, `LICENSE`, `NOTICE.md` | Licence texts and notices. See "Licensing rules" below. |
 | `.github/workflows/build.yml` | Windows CI: configure, build, test, zip. A `v*` tag creates a GitHub release. |
 

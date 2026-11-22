@@ -51,7 +51,7 @@ Tangier does not use any VCV logos, names or visual designs.
 ## JUCE
 
 Tangier is built with the [JUCE framework](https://juce.com), fetched with
-CMake FetchContent (tag 9.0.4). Tangier uses JUCE under the
+CMake FetchContent (tag 9.0.5). Tangier uses JUCE under the
 **GNU Affero General Public License v3.0** (one of JUCE's two licence options).
 See [`licenses/AGPL-3.0.txt`](licenses/AGPL-3.0.txt) and `LICENSE.md` in the JUCE sources.
 
