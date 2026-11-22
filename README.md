@@ -5,11 +5,18 @@ standalone app). It is based on the **Interzone** module from
 [Valley Audio's ValleyRackFree](https://github.com/ValleyAudio/ValleyRackFree)
 for VCV Rack.
 
-Each voice has one oscillator (saw, pulse and sub at once), a mixer with noise
-and an external input, a 2/4-pole OTA low-pass filter followed by a high-pass
-filter, a looping ADSR envelope and a VCA. One LFO is shared by all voices.
-
 ![Tangier standalone app](docs/tangier.png)
+
+## Features
+
+- One oscillator per voice: saw, pulse and sub at once
+- Mixer with noise and an optional external audio input
+- 2/4-pole OTA low-pass filter followed by a high-pass filter
+- Looping ADSR envelope and a VCA
+- One LFO shared by all voices, optionally key-synced
+- Polyphonic, with a mono mode that returns to the previous held note
+- MIDI control of pitch, pitch bend, velocity, mod wheel, aftertouch and sustain
+
 
 ## MIDI
 
@@ -31,23 +38,26 @@ monophonically and returns to the previous held note on release.
 
 ## Building
 
-Requirements: CMake 3.22 or newer and a C++20 compiler (tested with Visual
-Studio 2026 on Windows).
+Requirements: CMake 3.22 or newer and a C++20 compiler (developed with Visual
+Studio 2026 on Windows). JUCE 9.0.5 is fetched with CMake FetchContent, so the
+first configure needs network access.
 
-```sh
+```powershell
 git clone https://github.com/duddex/tangier.git
 cd tangier
 cmake -S . -B build
 cmake --build build --config Release
-ctest --test-dir build -C Release
+ctest --test-dir build -C Release --output-on-failure
 ```
 
 The plugin is written to `build/Tangier_artefacts/Release/VST3/Tangier.vst3`
 and the standalone app to `build/Tangier_artefacts/Release/Standalone/`.
 Copy `Tangier.vst3` to `C:\Program Files\Common Files\VST3` to use it in a DAW.
 
-GitHub Actions builds every push. Pushing a `v*` tag creates a release with a
-zip of the VST3, the standalone app and all licence files.
+## Releases
+
+GitHub Actions builds and tests every push on Windows. Pushing a `v*` tag creates a release with a
+zip of the VST3, the standalone app and the licence files.
 
 ## Licence
 
@@ -61,3 +71,9 @@ under the AGPLv3. See [`NOTICE.md`](NOTICE.md) for all copyright notices,
 third-party licences and a list of changes from the original.
 
 Tangier is not an official Valley Audio product.
+
+## Credits
+
+Designed and developed by [duddex](https://github.com/duddex). Based on the
+Interzone module by Dale Johnson (Valley Audio), with the looping ADSR derived
+from VCV Fundamental. Built on the [JUCE](https://juce.com) framework.
